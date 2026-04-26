@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Farming - Sensor Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#efecf5",
+                        "on-secondary-container": "#003f5f",
+                        "outline": "#767683",
+                        "inverse-surface": "#303036",
+                        "primary-container": "#1a237e",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#8dcdff",
+                        "on-primary-fixed": "#000767",
+                        "primary": "#000666",
+                        "inverse-on-surface": "#f2eff8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#390c00",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006493",
+                        "primary-fixed-dim": "#bdc2ff",
+                        "on-primary-container": "#8690ee",
+                        "outline-variant": "#c6c5d4",
+                        "on-surface": "#1b1b21",
+                        "surface-bright": "#fbf8ff",
+                        "tertiary": "#380b00",
+                        "on-surface-variant": "#454652",
+                        "surface-dim": "#dbd9e1",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#eae7ef",
+                        "on-tertiary-container": "#e17c5a",
+                        "secondary-fixed": "#cae6ff",
+                        "surface-variant": "#e4e1ea",
+                        "surface-container-highest": "#e4e1ea",
+                        "on-tertiary-fixed-variant": "#7b2e12",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#e0e0ff",
+                        "surface-tint": "#4c56af",
+                        "on-primary-fixed-variant": "#343d96",
+                        "on-secondary-fixed": "#001e30",
+                        "on-secondary-fixed-variant": "#004b70",
+                        "surface-container-low": "#f5f2fb",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-background": "#1b1b21",
+                        "inverse-primary": "#bdc2ff",
+                        "secondary-container": "#00affe",
+                        "background": "#fbf8ff",
+                        "surface": "#fbf8ff",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#5c1800"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "32px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "data-display": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "h1": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "data-display": ["28px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "h3": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-40 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-lg border-r border-slate-200/50 dark:border-slate-800/50 flex flex-col py-6 px-4 gap-2">
+<div class="flex items-center gap-3 px-2 mb-8">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="eco">eco</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-indigo-900 dark:text-indigo-300 font-h3 text-h3">Smart Farming</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-label-sm text-label-sm">IoT Dashboard</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 hover:pl-2 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 hover:pl-2 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Control &amp; Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 hover:pl-2 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-body-md text-body-md">Charts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-r-4 border-indigo-600 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-body-md text-body-md font-medium">Data</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 hover:pl-2 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="neurology">neurology</span>
+<span class="font-body-md text-body-md">AI Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200/30 dark:hover:bg-slate-800/30 hover:pl-2 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span class="font-body-md text-body-md">Info</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 pt-4 border-t border-slate-200/50 dark:border-slate-800/50">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="memory">memory</span>
+<span>ESP32</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="sensors">sensors</span>
+<span>IoT</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="school">school</span>
+<span>HCMUTE</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm shadow-indigo-900/5 flex justify-between items-center h-16 px-6 w-full font-['Inter'] antialiased text-sm">
+<div class="text-xl font-black tracking-tighter text-indigo-900 dark:text-white font-h2 text-h2">HCMUTE</div>
+<div class="flex items-center gap-4 text-indigo-900 dark:text-indigo-100">
+<button class="p-2 rounded-full hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden ml-2 cursor-pointer border border-outline-variant">
+<img alt="Admin User Avatar" class="w-full h-full object-cover" data-alt="Professional headshot of a person looking forward" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgDxiipfUU2Cde6_9Se3RTmLEsTvyOT33rt0WRFdv-koaEmzL5DXi06WiDaZvtMSBNAerH-r1mAZnD3lyKcofTF9GY9zmJAHJT5_HuNReIbgeFdgUzJpA9M0jnKgZULwdWNzw_NqIJD8a69nbqbV1kgWLG3sqeP-Jwgrs8_AjuAhCVSzffrlSveJz9LwsWBNDCgcKdFaPSgWoPO84RqRGOeN9gfCn0z_rKF2VeTUe2bYMjvw_DkVN--6CLrKw7abfqqcYH5Ku-o3ju"/>
+</div>
+</div>
+</header>
+<div class="p-margin flex-1 flex flex-col gap-lg">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-h2 text-h2 text-on-background">Sensor Data</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Comprehensive historical logs from all active nodes.</p>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,6,102,0.04)] p-md flex flex-col lg:flex-row justify-between items-center gap-md">
+<div class="flex flex-wrap items-center gap-md w-full lg:w-auto">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]" data-icon="calendar_month">calendar_month</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-fixed-dim focus:ring-2 focus:ring-primary-fixed-dim/20 transition-all outline-none w-64" placeholder="Date Range" type="text" value="Oct 1, 2023 - Oct 7, 2023"/>
+</div>
+<div class="relative">
+<select class="pl-4 pr-10 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-fixed-dim focus:ring-2 focus:ring-primary-fixed-dim/20 transition-all outline-none appearance-none cursor-pointer">
+<option>Sort: Newest First</option>
+<option>Sort: Oldest First</option>
+<option>Sort: Temp (High-Low)</option>
+<option>Sort: Temp (Low-High)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<div class="relative">
+<select class="pl-4 pr-10 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-fixed-dim focus:ring-2 focus:ring-primary-fixed-dim/20 transition-all outline-none appearance-none cursor-pointer w-32">
+<option>50 / page</option>
+<option>100 / page</option>
+<option>250 / page</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="flex items-center gap-sm w-full lg:w-auto justify-end">
+<button class="px-4 py-2 rounded-lg border border-secondary text-secondary font-label-sm text-label-sm hover:bg-secondary/5 transition-colors flex items-center gap-2 h-10">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+                        Filter Data
+                    </button>
+<button class="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center gap-2 h-10 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="download">download</span>
+                        Export CSV
+                    </button>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,6,102,0.04)] flex-1 flex flex-col overflow-hidden">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse min-w-[900px]">
+<thead class="sticky top-0 bg-surface-container-low z-10 border-b border-outline-variant shadow-sm">
+<tr>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">ID</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">Timestamp</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">Temp (°C)</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">Humidity (%)</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">EC (mS/cm)</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">pH</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">N (mg/kg)</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">P (mg/kg)</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">K (mg/kg)</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10482</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 14:30:00</td>
+<td class="py-3 px-4">24.5</td>
+<td class="py-3 px-4">65.2</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.5</td>
+<td class="py-3 px-4">120</td>
+<td class="py-3 px-4">45</td>
+<td class="py-3 px-4">180</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10481</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 14:15:00</td>
+<td class="py-3 px-4">24.6</td>
+<td class="py-3 px-4">65.0</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.4</td>
+<td class="py-3 px-4">118</td>
+<td class="py-3 px-4">44</td>
+<td class="py-3 px-4">178</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10480</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 14:00:00</td>
+<td class="py-3 px-4">24.8</td>
+<td class="py-3 px-4">64.5</td>
+<td class="py-3 px-4">1.3</td>
+<td class="py-3 px-4">6.5</td>
+<td class="py-3 px-4">122</td>
+<td class="py-3 px-4">46</td>
+<td class="py-3 px-4">182</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10479</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 13:45:00</td>
+<td class="py-3 px-4">25.1</td>
+<td class="py-3 px-4">63.8</td>
+<td class="py-3 px-4 text-error font-medium">1.8</td>
+<td class="py-3 px-4">6.6</td>
+<td class="py-3 px-4">125</td>
+<td class="py-3 px-4">48</td>
+<td class="py-3 px-4">185</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10478</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 13:30:00</td>
+<td class="py-3 px-4">25.3</td>
+<td class="py-3 px-4">63.0</td>
+<td class="py-3 px-4">1.4</td>
+<td class="py-3 px-4">6.5</td>
+<td class="py-3 px-4">121</td>
+<td class="py-3 px-4">45</td>
+<td class="py-3 px-4">181</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10477</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 13:15:00</td>
+<td class="py-3 px-4">25.5</td>
+<td class="py-3 px-4">62.5</td>
+<td class="py-3 px-4">1.3</td>
+<td class="py-3 px-4">6.4</td>
+<td class="py-3 px-4">119</td>
+<td class="py-3 px-4">44</td>
+<td class="py-3 px-4">179</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10476</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 13:00:00</td>
+<td class="py-3 px-4">25.8</td>
+<td class="py-3 px-4">61.8</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.3</td>
+<td class="py-3 px-4 text-error font-medium">95</td>
+<td class="py-3 px-4">42</td>
+<td class="py-3 px-4">175</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10475</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 12:45:00</td>
+<td class="py-3 px-4">26.0</td>
+<td class="py-3 px-4">61.0</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.3</td>
+<td class="py-3 px-4">100</td>
+<td class="py-3 px-4">43</td>
+<td class="py-3 px-4">177</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10474</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 12:30:00</td>
+<td class="py-3 px-4">26.2</td>
+<td class="py-3 px-4">60.5</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.4</td>
+<td class="py-3 px-4">105</td>
+<td class="py-3 px-4">44</td>
+<td class="py-3 px-4">180</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 text-outline font-medium">#10473</td>
+<td class="py-3 px-4 whitespace-nowrap">2023-10-07 12:15:00</td>
+<td class="py-3 px-4">26.1</td>
+<td class="py-3 px-4">60.8</td>
+<td class="py-3 px-4">1.2</td>
+<td class="py-3 px-4">6.4</td>
+<td class="py-3 px-4">108</td>
+<td class="py-3 px-4">44</td>
+<td class="py-3 px-4">182</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="border-t border-outline-variant p-4 flex items-center justify-between bg-surface-container-lowest">
+<p class="font-body-md text-body-md text-on-surface-variant">Showing <span class="font-medium text-on-surface">1</span> to <span class="font-medium text-on-surface">50</span> of <span class="font-medium text-on-surface">10,482</span> entries</p>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded text-outline hover:bg-surface-variant transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary-container text-on-primary-container font-medium text-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface hover:bg-surface-variant transition-colors font-medium text-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface hover:bg-surface-variant transition-colors font-medium text-sm">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-outline">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface hover:bg-surface-variant transition-colors font-medium text-sm">210</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-outline hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,72 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model SensorData {
+  id               Int      @id @default(autoincrement())
+  soilTemperature  Float?   @map("soil_temperature")
+  soilHumidity     Float?   @map("soil_humidity")
+  soilConductivity Float?   @map("soil_conductivity")
+  soilPH           Float?   @map("soil_ph")
+  nitrogen         Float?
+  phosphorus       Float?
+  potassium        Float?
+  lux              Float?
+  voltageV         Float?   @map("voltage_v")
+  busVoltageV      Float?   @map("bus_voltage_v")
+  shuntVoltageMv   Float?   @map("shunt_voltage_mv")
+  currentA         Float?   @map("current_a")
+  powerW           Float?   @map("power_w")
+  activeRelays     Int      @default(0) @map("active_relays")
+  regDate          DateTime @default(now()) @map("reg_date")
+
+  @@map("sensor_data")
+}
+
+model LedStatus {
+  id        Int      @id @default(1)
+  led1      Boolean  @default(false)
+  led2      Boolean  @default(false)
+  led3      Boolean  @default(false)
+  led4      Boolean  @default(false)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("led_status")
+}
+
+model ModeSetting {
+  id   Int @id @default(1)
+  mode Int @default(0)
+
+  @@map("mode_setting")
+}
+
+model Settings {
+  id                   Int @id @default(1)
+  temperatureThreshold Int @default(0) @map("temperature_threshold")
+
+  @@map("settings")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  fname    String
+  username String @unique
+  password String
+
+  @@map("users")
+}
+
+model LedControl {
+  id          Int    @id @default(autoincrement())
+  ledName     String @map("led_name")
+  turnOnTime  String @map("turn_on_time")
+  turnOffTime String @map("turn_off_time")
+
+  @@map("led_control")
+}

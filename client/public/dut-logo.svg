@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 860" role="img" aria-labelledby="title desc">
+  <title id="title">DUT Bach Khoa Da Nang Logo</title>
+  <desc id="desc">Stylized yellow and blue emblem with Bach Khoa Da Nang text.</desc>
+  <rect x="2" y="2" width="856" height="856" fill="#e6e6e6" stroke="#f5f500" stroke-width="8" />
+  <text x="120" y="120" font-family="Arial, Helvetica, sans-serif" font-size="88" fill="#0027c8" letter-spacing="12">D</text>
+  <text x="120" y="230" font-family="Arial, Helvetica, sans-serif" font-size="98" font-weight="700" fill="#d20000" letter-spacing="8">BACH KHOA</text>
+  <text x="120" y="320" font-family="Arial, Helvetica, sans-serif" font-size="88" fill="#0027c8" letter-spacing="12">N</text>
+  <text x="120" y="430" font-family="Arial, Helvetica, sans-serif" font-size="88" fill="#0027c8" letter-spacing="12">A</text>
+  <text x="120" y="540" font-family="Arial, Helvetica, sans-serif" font-size="88" fill="#0027c8" letter-spacing="12">N</text>
+  <text x="120" y="650" font-family="Arial, Helvetica, sans-serif" font-size="88" fill="#0027c8" letter-spacing="12">G</text>
+  <rect x="210" y="240" width="610" height="610" fill="#f5f500" stroke="#f5f500" stroke-width="8" />
+  <rect x="220" y="250" width="590" height="590" fill="#1100d8" />
+  <path d="M310 250 C470 250 570 350 570 450 C570 550 470 650 310 650 L310 840 L220 840 L220 250 Z" fill="#1100d8" />
+  <path d="M420 250 C620 250 750 390 750 590 C750 700 710 780 690 840 L810 840 L810 250 Z" fill="#f5f500" />
+</svg>

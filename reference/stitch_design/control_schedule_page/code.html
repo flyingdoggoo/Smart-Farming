@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Control &amp; Schedule - Smart Farming</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#efecf5",
+                        "on-secondary-container": "#003f5f",
+                        "outline": "#767683",
+                        "inverse-surface": "#303036",
+                        "primary-container": "#1a237e",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#8dcdff",
+                        "on-primary-fixed": "#000767",
+                        "primary": "#000666",
+                        "inverse-on-surface": "#f2eff8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#390c00",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006493",
+                        "primary-fixed-dim": "#bdc2ff",
+                        "on-primary-container": "#8690ee",
+                        "outline-variant": "#c6c5d4",
+                        "on-surface": "#1b1b21",
+                        "surface-bright": "#fbf8ff",
+                        "tertiary": "#380b00",
+                        "on-surface-variant": "#454652",
+                        "surface-dim": "#dbd9e1",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#eae7ef",
+                        "on-tertiary-container": "#e17c5a",
+                        "secondary-fixed": "#cae6ff",
+                        "surface-variant": "#e4e1ea",
+                        "surface-container-highest": "#e4e1ea",
+                        "on-tertiary-fixed-variant": "#7b2e12",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#e0e0ff",
+                        "surface-tint": "#4c56af",
+                        "on-primary-fixed-variant": "#343d96",
+                        "on-secondary-fixed": "#001e30",
+                        "on-secondary-fixed-variant": "#004b70",
+                        "surface-container-low": "#f5f2fb",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-background": "#1b1b21",
+                        "inverse-primary": "#bdc2ff",
+                        "secondary-container": "#00affe",
+                        "background": "#fbf8ff",
+                        "surface": "#fbf8ff",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#5c1800"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "32px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "data-display": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "data-display": ["28px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "h3": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-64 z-40 border-r border-slate-200/50 bg-slate-50/50 backdrop-blur-lg flex flex-col py-6 px-4 gap-2 hidden md:flex">
+<!-- Header -->
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<h1 class="font-h3 text-h3 text-indigo-900">Smart Farming</h1>
+<p class="font-label-sm text-label-sm text-slate-500">IoT Dashboard</p>
+</div>
+</div>
+<!-- Main Navigation -->
+<div class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-200/30 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-['Inter'] text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-indigo-50 text-indigo-700 border-r-4 border-indigo-600 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+<span class="font-['Inter'] text-sm font-medium">Control &amp; Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-200/30 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">insights</span>
+<span class="font-['Inter'] text-sm font-medium">Charts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-200/30 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">database</span>
+<span class="font-['Inter'] text-sm font-medium">Data</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-200/30 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">neurology</span>
+<span class="font-['Inter'] text-sm font-medium">AI Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-200/30 hover:pl-4 transition-all duration-300 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined text-[24px]">info</span>
+<span class="font-['Inter'] text-sm font-medium">Info</span>
+</a>
+</div>
+<!-- Footer Navigation -->
+<div class="mt-auto flex flex-col gap-1 border-t border-slate-200/50 pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">memory</span>
+<span>ESP32</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">sensors</span>
+<span>IoT</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-200/30 transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span>HCMUTE</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-50 border-b border-slate-200/50 bg-white/80 backdrop-blur-xl shadow-sm shadow-indigo-900/5 flex justify-between items-center h-16 px-6 w-full hidden md:flex">
+<div class="flex items-center">
+<span class="font-['Inter'] antialiased text-sm text-xl font-black tracking-tighter text-indigo-900">HCMUTE</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full text-slate-500 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full text-slate-500 hover:bg-slate-100/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 ml-2">
+<img alt="Admin User Avatar" class="w-full h-full object-cover" data-alt="Default user avatar with initials AU on dark blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0pSRbiDNCLTHtWWEJuWzCiWGI-RughwTrxkhgBGoufpuHNoev48uSwS_tDqxqoUs3a4v7uo7vF7N8a2k0uLCHQEyFU9apdVA2FInHVLkBZpR8FmGDi58KqNQori_BkYyZnQMSaWjKrjYE96Sep5Cx5EI_sJAZc2tcG1M_UA_mScrQR-fZNjhFq_xc6Npts1wzH43_iw2929lA_fMvAt0ZeAgrnEgbWegQYwc730ZnFicBh_mt5eC9lzQ6_GlUmTP2uOSBW3638mYI"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-6 lg:p-8 flex-1 max-w-7xl mx-auto w-full flex flex-col gap-8">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">Control &amp; Schedule</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage device operations and automated timings.</p>
+</div>
+</div>
+<!-- Mode Selection Section -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_4px_20px_rgba(0,6,102,0.04)]">
+<h3 class="font-h3 text-h3 text-on-surface mb-6">Operation Mode</h3>
+<div class="flex flex-col sm:flex-row gap-4">
+<!-- Manual Mode Button (Active) -->
+<button class="flex-1 relative group overflow-hidden rounded-full p-[2px] transition-all duration-300">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-100 transition-opacity"></div>
+<div class="relative flex items-center justify-center gap-3 bg-primary bg-opacity-10 rounded-full px-8 py-4 w-full">
+<span class="material-symbols-outlined text-on-primary text-[28px]">touch_app</span>
+<span class="font-h3 text-h3 text-on-primary">Manual Control</span>
+</div>
+</button>
+<!-- Auto Mode Button (Inactive) -->
+<button class="flex-1 relative group overflow-hidden rounded-full p-[2px] transition-all duration-300">
+<div class="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+<div class="relative flex items-center justify-center gap-3 bg-surface-container rounded-full px-8 py-4 w-full border border-outline-variant group-hover:border-amber-400 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-amber-600 transition-colors text-[28px]">smart_toy</span>
+<span class="font-h3 text-h3 text-on-surface-variant group-hover:text-amber-600 transition-colors">Auto Schedule</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Schedule Table Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,6,102,0.04)] flex-1 overflow-hidden flex flex-col">
+<div class="p-6 border-b border-surface-variant flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Automation Schedule</h3>
+<button class="bg-gradient-to-r from-primary to-secondary text-on-primary px-4 py-2 rounded-lg font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center gap-2 h-10">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Rule
+                    </button>
+</div>
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant">
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Device</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Start Time</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">End Time</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 text-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">water_drop</span>
+</div>
+<span class="font-medium">Irrigation Pump 1</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="06:00"/>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="06:30"/>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<span class="font-medium">Greenhouse Lights</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="18:00"/>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="22:00"/>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">air</span>
+</div>
+<span class="font-medium">Ventilation Fan 1</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="12:00"/>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-md w-fit border border-outline-variant focus-within:border-secondary-container focus-within:ring-1 focus-within:ring-secondary-container transition-all">
+<span class="material-symbols-outlined text-outline text-[16px]">schedule</span>
+<input class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-sm w-24" type="time" value="14:00"/>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Actions -->
+<div class="p-6 border-t border-surface-variant bg-surface-container-lowest flex justify-end gap-4 mt-auto">
+<button class="px-6 py-2 rounded-lg font-label-sm text-label-sm text-primary hover:bg-primary/5 transition-colors border border-outline-variant h-10">
+                        Discard Changes
+                    </button>
+<button class="px-6 py-2 rounded-lg font-label-sm text-label-sm text-on-primary bg-gradient-to-r from-primary to-[#1a237e] hover:opacity-90 transition-opacity shadow-md h-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                        Save Schedule
+                    </button>
+</div>
+</section>
+</div>
+</main>
+</body></html>
