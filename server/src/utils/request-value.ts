@@ -66,3 +66,33 @@ export function parseOptionalInteger(
 
   return { value };
 }
+
+export function parseOptionalBoolean(
+  source: Record<string, unknown>,
+  key: string,
+  fallback: boolean,
+): { value: boolean; error?: string } {
+  const raw = getSingleValue(source, key);
+  if (raw === undefined || raw.trim() === '') {
+    return { value: fallback };
+  }
+
+  const normalized = raw.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return { value: true };
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return { value: false };
+
+  return { value: fallback, error: `${key} must be a valid boolean` };
+}
+
+export function parseFirstOptionalNumber(
+  source: Record<string, unknown>,
+  ...keys: string[]
+): { value: number | null; error?: string } {
+  for (const key of keys) {
+    const res = parseOptionalNumber(source, key);
+    if (res.value !== null || res.error) {
+      return res;
+    }
+  }
+  return { value: null };
+}

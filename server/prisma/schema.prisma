@@ -22,6 +22,9 @@ model SensorData {
   shuntVoltageMv   Float?   @map("shunt_voltage_mv")
   currentA         Float?   @map("current_a")
   powerW           Float?   @map("power_w")
+  npkValid         Boolean  @default(true) @map("npk_valid")
+  bh1750Valid      Boolean  @default(true) @map("bh1750_valid")
+  ina219Valid      Boolean  @default(true) @map("ina219_valid")
   activeRelays     Int      @default(0) @map("active_relays")
   regDate          DateTime @default(now()) @map("reg_date")
 

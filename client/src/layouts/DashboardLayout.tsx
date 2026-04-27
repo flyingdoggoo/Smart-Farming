@@ -78,8 +78,8 @@ export default function DashboardLayout() {
         <header className="topbar">
           <div className="topbar-left">Dashboard</div>
           <div className="topbar-right">
-            <button className="topbar-icon-btn"><Bell size={20} /></button>
-            <button className="topbar-icon-btn"><HelpCircle size={20} /></button>
+            <button className="topbar-icon-btn" onClick={() => navigate('/notifications')}><Bell size={20} /></button>
+            <button className="topbar-icon-btn" onClick={() => navigate('/help')}><HelpCircle size={20} /></button>
             <div className="topbar-avatar">
               {(user.fname || 'U').charAt(0).toUpperCase()}
             </div>

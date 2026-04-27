@@ -18,7 +18,37 @@ export default function PredictionPage() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [autofilling, setAutofilling] = useState(false);
   const [error, setError] = useState('');
+
+  async function handleAutoFill() {
+    setAutofilling(true);
+    try {
+      const [sensorRes, weatherRes] = await Promise.all([
+        api.get('/sensor/latest'),
+        api.get('/weather/today')
+      ]);
+      const data = sensorRes.data;
+      const weather = weatherRes.data;
+
+      if (data) {
+        setFormData(prev => ({
+          ...prev,
+          Temperature: data.temp !== null ? String(data.temp) : prev.Temperature || '',
+          Humidity: data.humi !== null ? String(data.humi) : prev.Humidity || '',
+          pH: data.ph !== null ? String(data.ph) : prev.pH || '',
+          Nitrogen: data.nitrogen !== null ? String(data.nitrogen) : prev.Nitrogen || '',
+          Phosporus: data.phosphorus !== null ? String(data.phosphorus) : prev.Phosporus || '',
+          Potassium: data.potassium !== null ? String(data.potassium) : prev.Potassium || '',
+          Rainfall: weather?.today?.precipitationSumMm !== undefined ? String(weather.today.precipitationSumMm) : prev.Rainfall || '',
+        }));
+      }
+    } catch (e) {
+      console.error('Lỗi khi tự động điền:', e);
+    } finally {
+      setAutofilling(false);
+    }
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -49,9 +79,25 @@ export default function PredictionPage() {
         {/* Input form */}
         <div className="card">
           <div className="card-body">
-            <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Sliders size={20} /> Thông số Môi trường
-            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8, margin: 0 }}>
+                <Sliders size={20} /> Thông số Môi trường
+              </h3>
+              <button 
+                type="button" 
+                onClick={handleAutoFill} 
+                disabled={autofilling}
+                className="btn btn-primary" 
+                style={{ 
+                  display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, 
+                  padding: '6px 16px', minHeight: '36px', 
+                  borderRadius: 'var(--radius-full)'
+                }}
+              >
+                <RefreshCw size={14} style={{ animation: autofilling ? 'spin 1s linear infinite' : 'none' }} /> 
+                {autofilling ? 'Đang lấy dữ liệu...' : 'Tự động lấy dữ liệu'}
+              </button>
+            </div>
 
             <form onSubmit={handleSubmit}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
@@ -101,7 +147,7 @@ export default function PredictionPage() {
                   }}>
                     {result.crop_id && (
                       <img 
-                        src={`/assets/crops/${result.crop_id}.jpg`} 
+                        src={`/assets/crops/${result.crop_id}.jpg?v=2`} 
                         alt={result.prediction} 
                         style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 10 }}
                         onError={(e) => {

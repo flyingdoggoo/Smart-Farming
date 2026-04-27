@@ -9,6 +9,9 @@ import DataPage from './pages/DataPage';
 import PredictionPage from './pages/PredictionPage';
 import InfoPage from './pages/InfoPage';
 
+import HelpPage from './pages/HelpPage';
+import NotificationPage from './pages/NotificationPage';
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
   if (!token) return <Navigate to="/login" replace />;
@@ -35,6 +38,8 @@ export default function App() {
           <Route path="data" element={<DataPage />} />
           <Route path="predict" element={<PredictionPage />} />
           <Route path="info" element={<InfoPage />} />
+          <Route path="help" element={<HelpPage />} />
+          <Route path="notifications" element={<NotificationPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

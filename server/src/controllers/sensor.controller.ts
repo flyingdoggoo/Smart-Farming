@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as sensorService from '../services/sensor.service';
 import * as alertService from '../services/alert.service';
-import { parseOptionalInteger, parseOptionalNumber, parseRequiredNumber } from '../utils/request-value';
+import { parseOptionalInteger, parseOptionalNumber, parseRequiredNumber, parseFirstOptionalNumber, parseOptionalBoolean } from '../utils/request-value';
 
 export async function getLatest(_req: Request, res: Response): Promise<void> {
   try {
@@ -52,12 +52,15 @@ export async function insertData(req: Request, res: Response): Promise<void> {
       phosphorus: parseRequiredNumber(params, 'phosphorus'),
       potassium: parseRequiredNumber(params, 'potassium'),
       lux: parseOptionalNumber(params, 'lux'),
-      voltageV: parseOptionalNumber(params, 'voltageV'),
+      voltageV: parseFirstOptionalNumber(params, 'voltageV', 'voltage_v', 'voltage'),
       busVoltageV: parseOptionalNumber(params, 'busVoltageV'),
       shuntVoltageMv: parseOptionalNumber(params, 'shuntVoltageMv'),
-      currentA: parseOptionalNumber(params, 'currentA'),
-      powerW: parseOptionalNumber(params, 'powerW'),
+      currentA: parseFirstOptionalNumber(params, 'currentA', 'current_a', 'current'),
+      powerW: parseFirstOptionalNumber(params, 'powerW', 'power_w', 'power'),
       activeRelays: parseOptionalInteger(params, 'activeRelays', 0),
+      npkValid: parseOptionalBoolean(params, 'npkValid', parseOptionalBoolean(params, 'npk_valid', true).value),
+      bh1750Valid: parseOptionalBoolean(params, 'bh1750Valid', parseOptionalBoolean(params, 'bh1750_valid', true).value),
+      ina219Valid: parseOptionalBoolean(params, 'ina219Valid', parseOptionalBoolean(params, 'ina219_valid', true).value),
     };
 
     const validationErrors = Object.values(parsed)

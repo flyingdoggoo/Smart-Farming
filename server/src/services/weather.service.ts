@@ -34,6 +34,7 @@ export interface WeatherTodayPayload {
     tempMinC: number;
     tempMaxC: number;
     precipitationProbabilityMaxPct: number;
+    precipitationSumMm: number;
     uvIndexMax: number;
     sunrise: string;
     sunset: string;
@@ -123,7 +124,7 @@ export async function getTodayWeather(input: {
     timezone: 'auto',
     forecast_days: '1',
     current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m',
-    daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset',
+    daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,uv_index_max,sunrise,sunset',
   });
 
   const response = await fetch(`${WEATHER_API_URL}?${params.toString()}`);
@@ -164,6 +165,7 @@ export async function getTodayWeather(input: {
       tempMinC: Number(data.daily.temperature_2m_min?.[0] ?? 0),
       tempMaxC: Number(data.daily.temperature_2m_max?.[0] ?? 0),
       precipitationProbabilityMaxPct: Number(data.daily.precipitation_probability_max?.[0] ?? 0),
+      precipitationSumMm: Number(data.daily.precipitation_sum?.[0] ?? 0),
       uvIndexMax: Number(data.daily.uv_index_max?.[0] ?? 0),
       sunrise: String(data.daily.sunrise?.[0] || ''),
       sunset: String(data.daily.sunset?.[0] || ''),

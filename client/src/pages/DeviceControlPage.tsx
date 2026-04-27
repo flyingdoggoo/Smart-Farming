@@ -11,20 +11,37 @@ const devices = [
 
 export default function DeviceControlPage() {
   const [relays, setRelays] = useState<Record<string, number>>({ led1: 0, led2: 0, led3: 0, led4: 0 });
+  const [mode, setMode] = useState<number>(0);
   const [loading, setLoading] = useState<string | null>(null);
 
-  const loadRelays = useCallback(async () => {
+  const loadData = useCallback(async () => {
     try {
-      const res = await api.get('/relay');
-      setRelays({ led1: res.data.led1, led2: res.data.led2, led3: res.data.led3, led4: res.data.led4 });
+      const [relayRes, modeRes] = await Promise.all([
+        api.get('/relay'),
+        api.get('/mode')
+      ]);
+      setRelays({ led1: relayRes.data.led1, led2: relayRes.data.led2, led3: relayRes.data.led3, led4: relayRes.data.led4 });
+      if (modeRes.data && modeRes.data.mode !== undefined) {
+        setMode(modeRes.data.mode);
+      }
     } catch (e) { console.error(e); }
   }, []);
 
   useEffect(() => {
-    loadRelays();
-    const interval = setInterval(loadRelays, 3000);
+    loadData();
+    const interval = setInterval(loadData, 3000);
     return () => clearInterval(interval);
-  }, [loadRelays]);
+  }, [loadData]);
+
+  async function toggleMode() {
+    setLoading('mode');
+    try {
+      const newMode = mode === 1 ? 0 : 1;
+      await api.put('/mode', { mode: newMode });
+      setMode(newMode);
+    } catch (e) { console.error(e); }
+    setLoading(null);
+  }
 
   async function toggleRelay(key: string) {
     setLoading(key);
@@ -49,6 +66,28 @@ export default function DeviceControlPage() {
         </div>
       </div>
 
+      <div className="card" style={{ marginBottom: 24, padding: 24, background: mode === 1 ? 'linear-gradient(135deg, #f0fdf4, #dcfce7)' : 'var(--surface-container-lowest)', border: mode === 1 ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(15, 23, 42, 0.06)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h2 style={{ fontSize: 18, fontWeight: 600, color: mode === 1 ? '#166534' : 'var(--on-surface)', marginBottom: 8 }}>Chế độ Điều khiển Tự động</h2>
+            <p style={{ color: mode === 1 ? '#15803d' : 'var(--on-surface-variant)', margin: 0, fontSize: 14 }}>
+              {mode === 1 
+                ? 'Hệ thống đang tự động bật/tắt thiết bị theo lịch trình. Chức năng điều khiển thủ công đang bị khóa.' 
+                : 'Hệ thống đang ở chế độ thủ công. Bạn có thể tự do điều khiển thiết bị bên dưới.'}
+            </p>
+          </div>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={mode === 1}
+              onChange={toggleMode}
+              disabled={loading === 'mode'}
+            />
+            <span className="toggle-slider" />
+          </label>
+        </div>
+      </div>
+
       <div className="grid grid-4">
         {devices.map((dev) => {
           const on = relays[dev.key] === 1;
@@ -56,6 +95,7 @@ export default function DeviceControlPage() {
             <div key={dev.key} className="card" style={{
               background: on ? 'linear-gradient(135deg, #f0f7ff, #e8f4fd)' : 'var(--surface-container-lowest)',
               border: on ? '1px solid rgba(0, 175, 254, 0.2)' : '1px solid rgba(15, 23, 42, 0.06)',
+              opacity: mode === 1 ? 0.6 : 1,
             }}>
               <div className="card-body" style={{ padding: 24 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -72,7 +112,7 @@ export default function DeviceControlPage() {
                       type="checkbox"
                       checked={on}
                       onChange={() => toggleRelay(dev.key)}
-                      disabled={loading === dev.key}
+                      disabled={loading === dev.key || mode === 1}
                     />
                     <span className="toggle-slider" />
                   </label>

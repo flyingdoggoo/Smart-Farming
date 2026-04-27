@@ -15,6 +15,9 @@ export interface SensorInput {
   currentA?: number | null;
   powerW?: number | null;
   activeRelays?: number;
+  npkValid?: boolean;
+  bh1750Valid?: boolean;
+  ina219Valid?: boolean;
 }
 
 async function fetchLatestRow() {
@@ -33,6 +36,7 @@ export async function getLatest() {
       lux: null, voltageV: null, busVoltageV: null,
       shuntVoltageMv: null, currentA: null, powerW: null,
       activeRelays: 0, last_reading_time: null,
+      npkValid: true, bh1750Valid: true, ina219Valid: true,
     };
   }
 
@@ -52,6 +56,9 @@ export async function getLatest() {
     currentA: data.currentA,
     powerW: data.powerW,
     activeRelays: data.activeRelays,
+    npkValid: data.npkValid,
+    bh1750Valid: data.bh1750Valid,
+    ina219Valid: data.ina219Valid,
     last_reading_time: data.regDate,
   };
 }
@@ -76,6 +83,9 @@ export async function getLatestLegacySensorData() {
       currentA: null,
       powerW: null,
       activeRelays: null,
+      npkValid: null,
+      bh1750Valid: null,
+      ina219Valid: null,
       reg_date: null,
     };
   }
@@ -96,6 +106,9 @@ export async function getLatestLegacySensorData() {
     currentA: data.currentA,
     powerW: data.powerW,
     activeRelays: data.activeRelays,
+    npkValid: data.npkValid,
+    bh1750Valid: data.bh1750Valid,
+    ina219Valid: data.ina219Valid,
     reg_date: data.regDate,
   };
 }
@@ -130,6 +143,9 @@ export async function getHistory(limit: number, days: number) {
     currentA: rows.map(r => r.currentA),
     powerW: rows.map(r => r.powerW),
     activeRelays: rows.map(r => r.activeRelays),
+    npkValid: rows.map(r => r.npkValid),
+    bh1750Valid: rows.map(r => r.bh1750Valid),
+    ina219Valid: rows.map(r => r.ina219Valid),
   };
 }
 
@@ -169,6 +185,9 @@ export async function insertSensorData(input: SensorInput) {
       currentA: input.currentA ?? null,
       powerW: input.powerW ?? null,
       activeRelays: input.activeRelays ?? 0,
+      npkValid: input.npkValid ?? true,
+      bh1750Valid: input.bh1750Valid ?? true,
+      ina219Valid: input.ina219Valid ?? true,
     },
   });
 }
