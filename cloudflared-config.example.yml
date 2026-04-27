@@ -1,0 +1,32 @@
+# Cloudflare Tunnel - NCKH Smart Farming
+# ========================================
+# File mẫu cấu hình tunnel. Copy file này thành:
+#   %USERPROFILE%\.cloudflared\config.yml
+# và thay các giá trị <...> bằng giá trị thật.
+#
+# Hướng dẫn đầy đủ: xem README.md mục "Deploy lên Internet"
+
+tunnel: <TUNNEL_ID>
+credentials-file: C:\Users\<USERNAME>\.cloudflared\<TUNNEL_ID>.json
+
+ingress:
+  # Backend API
+  - hostname: api.smartfarm.k23bkdn.io.vn
+    service: http://localhost:3001
+    originRequest:
+      noTLSVerify: true
+
+  # (Tùy chọn) ML Prediction Server — bỏ comment nếu muốn expose
+  # - hostname: ml.smartfarm.k23bkdn.io.vn
+  #   service: http://localhost:8080
+  #   originRequest:
+  #     noTLSVerify: true
+
+  # Frontend Dashboard
+  - hostname: smartfarm.k23bkdn.io.vn
+    service: http://localhost:5173
+    originRequest:
+      noTLSVerify: true
+
+  # Catch-all (bắt buộc phải có, luôn là rule cuối cùng)
+  - service: http_status:404

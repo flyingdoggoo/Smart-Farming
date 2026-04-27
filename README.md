@@ -113,3 +113,46 @@ Thiết lập trong `.env`:
 API check thủ công:
 - `GET /api/alerts/temperature/check`
 - legacy: `GET /database/checkSensor.php`
+
+## 7) Deploy lên Internet (Cloudflare Tunnel)
+
+Dùng Cloudflare Tunnel để biến laptop thành server, truy cập qua domain riêng.
+
+### Kiến trúc
+
+```
+Internet → smartfarm.k23bkdn.io.vn     → localhost:5173 (Frontend)
+         → api.smartfarm.k23bkdn.io.vn → localhost:3001 (Backend)
+
+Nội bộ (không expose):
+         → localhost:8080 (ML Server)
+         → localhost:5432 (PostgreSQL Docker)
+```
+
+### Cài đặt nhanh
+
+```bat
+:: 1. Cài cloudflared
+winget install Cloudflare.cloudflared
+
+:: 2. Đăng nhập
+cloudflared tunnel login
+
+:: 3. Tạo tunnel
+cloudflared tunnel create smartfarm
+
+:: 4. Copy file config mẫu
+::    cloudflared-config.example.yml → %USERPROFILE%\.cloudflared\config.yml
+::    Thay <TUNNEL_ID>, <USERNAME>, <YOURDOMAIN> bằng giá trị thật
+
+:: 5. Tạo DNS records
+cloudflared tunnel route dns smartfarm smartfarm.k23bkdn.io.vn
+cloudflared tunnel route dns smartfarm api.smartfarm.k23bkdn.io.vn
+
+:: 6. Cập nhật .env (xem comment "Production:" trong file)
+
+:: 7. Chạy production
+start_production.bat
+```
+
+File config mẫu: `cloudflared-config.example.yml`

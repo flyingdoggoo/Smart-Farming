@@ -17,8 +17,8 @@ const char* WIFI_PASS = "Hien79830304@";
 
 // ĐỔI THÀNH IP/DOMAIN SERVER NODE.JS CỦA BẠN
 // Ví dụ local: "http://192.168.1.100:3001" (IP máy chạy server, KHÔNG dùng localhost vì ESP32 là thiết bị riêng)
-// Ví dụ production: "https://your-domain.com"
-const char* BASE_URL = "http://192.168.1.100:3001";
+// Ví dụ production: "https://api.smartfarm.k23bkdn.io.vn"
+const char* BASE_URL = "https://api.k23bkdn.io.vn";
 
 String URL_UPDATE    = String(BASE_URL) + "/database/update.php";
 String URL_GET_RELAY = String(BASE_URL) + "/database/getLedStatus.php";
