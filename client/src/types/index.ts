@@ -39,6 +39,13 @@ export interface User {
   username: string;
 }
 
+export interface PredictionCandidate {
+  prediction: string;
+  prediction_en?: string | null;
+  confidence: number | null;
+  crop_id?: number | null;
+}
+
 export interface PredictionResult {
   ok: boolean;
   prediction: string | null;
@@ -47,6 +54,7 @@ export interface PredictionResult {
   model_version?: string | null;
   confidence: number | null;
   crop_id?: number | null;
+  top_predictions?: PredictionCandidate[];
 }
 
 export interface WeatherData {

@@ -118,9 +118,47 @@ def predict():
 
         # Get prediction probabilities if available
         confidence = None
+        top_predictions = []
         if hasattr(model, 'predict_proba'):
-            proba = model.predict_proba(sc_mx_features)
-            confidence = round(float(np.max(proba)) * 100, 1)
+            proba = model.predict_proba(sc_mx_features)[0]
+            classes = getattr(model, 'classes_', None)
+            if classes is None or len(classes) != len(proba):
+                classes = np.arange(1, len(proba) + 1)
+
+            ranked_indices = np.argsort(proba)[::-1]
+            top_k = min(5, len(ranked_indices))
+
+            for idx in ranked_indices[:top_k]:
+                class_raw = classes[idx]
+                try:
+                    class_id = int(class_raw)
+                except (TypeError, ValueError):
+                    class_id = None
+
+                if class_id is not None:
+                    crop_vi_candidate = crop_dict.get(class_id, str(class_raw))
+                    crop_en_candidate = crop_dict_en.get(class_id, str(class_raw))
+                else:
+                    crop_vi_candidate = str(class_raw)
+                    crop_en_candidate = str(class_raw)
+
+                top_predictions.append({
+                    "crop_id": class_id,
+                    "prediction": crop_vi_candidate,
+                    "prediction_en": crop_en_candidate,
+                    "confidence": round(float(proba[idx]) * 100, 1),
+                })
+
+            if top_predictions:
+                confidence = top_predictions[0]["confidence"]
+
+        if not top_predictions:
+            top_predictions = [{
+                "crop_id": pred_id,
+                "prediction": crop_vi,
+                "prediction_en": crop_en,
+                "confidence": confidence,
+            }]
 
         return jsonify({
             "ok": True,
@@ -128,6 +166,7 @@ def predict():
             "prediction_en": crop_en,
             "confidence": confidence,
             "crop_id": pred_id,
+            "top_predictions": top_predictions,
             "model_name": MODEL_META.get('model_name', 'Unknown'),
             "model_version": MODEL_META.get('model_version', 'legacy')
         })

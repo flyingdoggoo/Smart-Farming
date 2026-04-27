@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Sliders, Beaker, Thermometer, Droplets, FlaskConical, CloudRain, Leaf, RefreshCw, Info } from 'lucide-react';
 import api from '../services/api';
-import type { PredictionResult } from '../types';
+import type { PredictionCandidate, PredictionResult } from '../types';
 
 const fields = [
   { name: 'Nitrogen', label: 'Nitrogen (N) Ratio', placeholder: 'e.g., 90', icon: Beaker },
@@ -13,6 +13,18 @@ const fields = [
   { name: 'pH', label: 'pH Level', placeholder: 'e.g., 6.5', icon: FlaskConical },
   { name: 'Rainfall', label: 'Rainfall (mm)', placeholder: 'e.g., 200.5', icon: CloudRain },
 ];
+
+function formatConfidence(value: number | null): string {
+  return value !== null ? `${value}%` : 'N/A';
+}
+
+function sortByConfidenceDesc(predictions: PredictionCandidate[]): PredictionCandidate[] {
+  return [...predictions].sort((left, right) => {
+    const leftValue = left.confidence ?? -1;
+    const rightValue = right.confidence ?? -1;
+    return rightValue - leftValue;
+  });
+}
 
 export default function PredictionPage() {
   const [formData, setFormData] = useState<Record<string, string>>({});
@@ -65,6 +77,23 @@ export default function PredictionPage() {
       setLoading(false);
     }
   }
+
+  const topPredictions = result
+    ? sortByConfidenceDesc(
+        result.top_predictions && result.top_predictions.length > 0
+          ? result.top_predictions
+          : result.prediction
+            ? [{
+                prediction: result.prediction,
+                prediction_en: result.prediction_en ?? null,
+                confidence: result.confidence,
+                crop_id: result.crop_id ?? null,
+              }]
+            : []
+      )
+    : [];
+
+  const bestPrediction = topPredictions[0] ?? null;
 
   return (
     <div className="fade-in">
@@ -137,45 +166,66 @@ export default function PredictionPage() {
 
               {result ? (
                 <>
-                  <div style={{
-                    width: 120, height: 120, borderRadius: 'var(--radius-full)', margin: '0 auto var(--space-md)',
-                    background: 'var(--primary-container)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    overflow: 'hidden',
-                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                    position: 'relative'
-                  }}>
-                    {result.crop_id && (
-                      <img 
-                        src={`/assets/crops/${result.crop_id}.jpg?v=2`} 
-                        alt={result.prediction} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0, zIndex: 10 }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    )}
-                    <Leaf size={40} color="var(--primary)" />
-                  </div>
-                  <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--on-surface)', marginBottom: 8 }}>
-                    {result.prediction}
-                  </div>
                   <p className="text-body-md text-muted" style={{ marginBottom: 'var(--space-md)' }}>
-                    Dựa trên thông số đầu vào, <strong>{result.prediction}</strong> là loại cây trồng phù hợp nhất.
+                    Danh sách dưới đây được sắp xếp theo confidence giảm dần để bạn chọn cây trồng phù hợp nhất.
                   </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'var(--outline-variant)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-                    <div style={{ background: 'var(--surface-container-lowest)', padding: 'var(--space-md)' }}>
-                      <div className="text-label-sm text-muted">Confidence</div>
-                      <div style={{ fontSize: 22, fontWeight: 800 }}>{result.confidence ? `${result.confidence}%` : 'N/A'}</div>
+
+                  {topPredictions.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--outline-variant)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: 'var(--space-md)' }}>
+                      {topPredictions.map((candidate, index) => (
+                        <div
+                          key={`${candidate.crop_id ?? candidate.prediction}-${index}`}
+                          style={{
+                            background: 'var(--surface-container-lowest)',
+                            padding: 'var(--space-sm) var(--space-md)',
+                            display: 'grid',
+                            gridTemplateColumns: '56px 1fr auto',
+                            alignItems: 'center',
+                            gap: 'var(--space-sm)',
+                            textAlign: 'left',
+                          }}
+                        >
+                          <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-md)', background: 'var(--surface-container-low)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
+                            {candidate.crop_id !== null && candidate.crop_id !== undefined && (
+                              <img
+                                src={`/assets/crops/${candidate.crop_id}.jpg?v=2`}
+                                alt={candidate.prediction}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = 'none';
+                                }}
+                              />
+                            )}
+                            <Leaf size={20} color="var(--primary)" />
+                          </div>
+
+                          <div>
+                            <div style={{ fontSize: index === 0 ? 20 : 16, fontWeight: index === 0 ? 800 : 700, color: 'var(--on-surface)' }}>
+                              {candidate.prediction}
+                            </div>
+                            <div className="text-label-sm text-muted">#{index + 1}</div>
+                          </div>
+
+                          <div style={{ textAlign: 'right' }}>
+                            <div className="text-label-sm text-muted">Confidence</div>
+                            <div style={{ fontSize: index === 0 ? 24 : 18, fontWeight: 800 }}>
+                              {formatConfidence(candidate.confidence)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div style={{ background: 'var(--surface-container-lowest)', padding: 'var(--space-md)' }}>
-                      <div className="text-label-sm text-muted">Model</div>
-                      <div style={{ fontSize: 22, fontWeight: 800 }}>{result.model}</div>
-                      {result.model_version && (
-                        <div className="text-label-sm text-muted">Version: {result.model_version}</div>
-                      )}
+                  ) : (
+                    <div className="login-error" style={{ textAlign: 'left', marginBottom: 'var(--space-md)' }}>
+                      Không nhận được danh sách cây trồng từ mô hình.
                     </div>
-                  </div>
+                  )}
+
+                  {bestPrediction && (
+                    <p className="text-body-md text-muted" style={{ marginBottom: 'var(--space-md)', textAlign: 'left' }}>
+                      Dựa trên thông số đầu vào, <strong>{bestPrediction.prediction}</strong> đang là lựa chọn tối ưu nhất.
+                    </p>
+                  )}
                 </>
               ) : error ? (
                 <div className="login-error" style={{ textAlign: 'left' }}>{error}</div>
