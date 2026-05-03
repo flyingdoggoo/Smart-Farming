@@ -37,6 +37,16 @@ export function resolveUpdateRedirect(query: ParsedQs): RedirectResult {
     return { target: `/api/relay?${relayParams.toString()}` };
   }
 
+  const led1 = getSingleValue(queryAsRecord, 'led1');
+  const led2 = getSingleValue(queryAsRecord, 'led2');
+  const led3 = getSingleValue(queryAsRecord, 'led3');
+  const led4 = getSingleValue(queryAsRecord, 'led4');
+
+  if (led1 !== undefined && led2 !== undefined && led3 !== undefined && led4 !== undefined) {
+    const batchParams = new URLSearchParams({ led1, led2, led3, led4 });
+    return { target: `/api/relay?${batchParams.toString()}` };
+  }
+
   const sensorParams = toSearchParams(query);
   const sensorQueryString = sensorParams.toString();
   const sensorTarget = sensorQueryString.length > 0

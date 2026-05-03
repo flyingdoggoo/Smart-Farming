@@ -13,6 +13,17 @@ export async function getStatus(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    const led1 = req.query.led1 as string;
+    const led2 = req.query.led2 as string;
+    const led3 = req.query.led3 as string;
+    const led4 = req.query.led4 as string;
+
+    if (led1 !== undefined && led2 !== undefined && led3 !== undefined && led4 !== undefined) {
+      const result = await relayService.batchUpdateRelays(parseInt(led1) === 1, parseInt(led2) === 1, parseInt(led3) === 1, parseInt(led4) === 1);
+      res.json({ ok: true, message: 'Batch update relay OK', ...result });
+      return;
+    }
+
     const status = await relayService.getAllRelayStatus();
     res.json({ ok: true, ...status });
   } catch (error: any) {

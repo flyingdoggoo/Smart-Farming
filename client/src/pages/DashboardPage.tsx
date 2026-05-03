@@ -230,52 +230,101 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        <section className="card weather-panel">
-          <div className="card-body weather-panel-body">
-            <div className="weather-top">
-              <div>
-                <div className="weather-label">Thời tiết hôm nay</div>
-                <h3>{weather?.location.name || 'Da Nang'}</h3>
+        <div className="dashboard-side-col" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+          <section className="card weather-panel">
+            <div className="card-body weather-panel-body">
+              <div className="weather-top">
+                <div>
+                  <div className="weather-label">Thời tiết hôm nay</div>
+                  <h3>{weather?.location.name || 'Da Nang'}</h3>
+                </div>
+                <CloudSun size={36} />
               </div>
-              <CloudSun size={36} />
-            </div>
 
-            <div className="weather-main">
-              <span className="weather-temp">
-                {formatValue(weather?.current.temperatureC, 1)}°
-              </span>
-              <span className="weather-text">
-                {weather?.current.weatherText || '--'}
-              </span>
-            </div>
-
-            <div className="weather-stat-grid">
-              <div className="weather-stat-card">
-                <Droplets size={16} />
-                <span>{formatValue(weather?.current.humidityPct, 0)}%</span>
-              </div>
-              <div className="weather-stat-card">
-                <Wind size={16} />
-                <span>{formatValue(weather?.current.windSpeedKmh, 1)} km/h</span>
-              </div>
-              <div className="weather-stat-card">
-                <Umbrella size={16} />
-                <span>{formatValue(weather?.today.precipitationProbabilityMaxPct, 0)}%</span>
-              </div>
-              <div className="weather-stat-card">
-                <Thermometer size={16} />
-                <span>
-                  {formatValue(weather?.today.tempMinC, 1)}° / {formatValue(weather?.today.tempMaxC, 1)}°
+              <div className="weather-main">
+                <span className="weather-temp">
+                  {formatValue(weather?.current.temperatureC, 1)}°
+                </span>
+                <span className="weather-text">
+                  {weather?.current.weatherText || '--'}
                 </span>
               </div>
-            </div>
 
-            <div className="weather-footer">
-              <span>Bình minh: {formatClock(weather?.today.sunrise)}</span>
-              <span>Hoàng hôn: {formatClock(weather?.today.sunset)}</span>
+              <div className="weather-stat-grid">
+                <div className="weather-stat-card">
+                  <Droplets size={16} />
+                  <span>{formatValue(weather?.current.humidityPct, 0)}%</span>
+                </div>
+                <div className="weather-stat-card">
+                  <Wind size={16} />
+                  <span>{formatValue(weather?.current.windSpeedKmh, 1)} km/h</span>
+                </div>
+                <div className="weather-stat-card">
+                  <Umbrella size={16} />
+                  <span>{formatValue(weather?.today.precipitationProbabilityMaxPct, 0)}%</span>
+                </div>
+                <div className="weather-stat-card">
+                  <Thermometer size={16} />
+                  <span>
+                    {formatValue(weather?.today.tempMinC, 1)}° / {formatValue(weather?.today.tempMaxC, 1)}°
+                  </span>
+                </div>
+              </div>
+
+              <div className="weather-footer">
+                <span>Bình minh: {formatClock(weather?.today.sunrise)}</span>
+                <span>Hoàng hôn: {formatClock(weather?.today.sunset)}</span>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section className="card energy-panel" style={{ flex: 1 }}>
+            <div className="card-body" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div className="dashboard-section-head" style={{ marginBottom: '1rem' }}>
+                <h2 className="text-h4" style={{ margin: 0 }}>Năng lượng & Trạng thái</h2>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div className="energy-stat" style={{ background: 'var(--surface-variant)', padding: '1rem', borderRadius: '12px' }}>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>Ánh sáng</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--primary)' }}>
+                    {formatValue(sensor?.lux, 0)} <span style={{ fontSize: '1rem', fontWeight: 400 }}>lux</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: (sensor?.lux ?? 0) < 1000 ? 'var(--warning)' : 'var(--success)', marginTop: '0.25rem' }}>
+                    {(sensor?.lux ?? 0) < 1000 ? 'Ánh sáng thấp' : 'BH1750 ổn định'}
+                  </div>
+                </div>
+                <div className="energy-stat" style={{ background: 'var(--surface-variant)', padding: '1rem', borderRadius: '12px' }}>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>Công suất</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--error)' }}>
+                    {formatValue(sensor?.powerW, 2)} <span style={{ fontSize: '1rem', fontWeight: 400 }}>W</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '0.25rem' }}>
+                    {formatValue(sensor?.voltageV, 2)}V - {formatValue(sensor?.currentA, 3)}A
+                  </div>
+                </div>
+              </div>
+
+              <div className="sensor-status" style={{ marginTop: 'auto', borderTop: '1px solid var(--outline-variant)', paddingTop: '1rem' }}>
+                <div style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.75rem' }}>Trạng thái Cảm biến</div>
+                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: sensor?.npkValid ? 'var(--success)' : 'var(--error)' }}></div>
+                    NPK
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: sensor?.bh1750Valid ? 'var(--success)' : 'var(--error)' }}></div>
+                    BH1750
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: sensor?.ina219Valid ? 'var(--success)' : 'var(--error)' }}></div>
+                    INA219
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

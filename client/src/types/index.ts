@@ -13,6 +13,9 @@ export interface SensorData {
   shuntVoltageMv: number | null;
   currentA: number | null;
   powerW: number | null;
+  npkValid?: boolean;
+  bh1750Valid?: boolean;
+  ina219Valid?: boolean;
   activeRelays: number;
   last_reading_time: string | null;
 }

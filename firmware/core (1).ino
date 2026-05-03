@@ -17,10 +17,10 @@
 #include "driver/gpio.h"
 
 // ================== WIFI + SERVER ==================
-const char* ssid     = "VC Analog 2";
-const char* password = "Hien79830304@";
+const char* ssid     = "ThiYen";
+const char* password = "20052012";
 
-const char* API_BASE = "https://vendingmachine.vinhcao.io.vn";
+const char* API_BASE = "https://api.smartfarm.k23bkdn.io.vn";
 
 // Nếu HTTPS bị lỗi chứng chỉ, để true để ESP32 vẫn gửi được.
 // Khi chạy sản phẩm chính thức có thể đổi sang false và dùng root CA.
@@ -210,6 +210,8 @@ int httpGET(const String& url, String& payload, uint32_t timeoutMs = 6000) {
   HTTPClient http;
   http.setTimeout(timeoutMs);
   http.setReuse(false);
+  http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+  http.setRedirectLimit(4);
 
   bool okBegin = false;
 
@@ -231,6 +233,11 @@ int httpGET(const String& url, String& payload, uint32_t timeoutMs = 6000) {
   http.addHeader("Cache-Control", "no-cache");
   http.addHeader("Connection", "close");
   int code = http.GET();
+
+  if (code <= 0) {
+    Serial.print("HTTP GET error: ");
+    Serial.println(http.errorToString(code));
+  }
 
   if (code > 0) {
     payload = http.getString();

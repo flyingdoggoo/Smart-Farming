@@ -43,3 +43,14 @@ export async function toggleRelay(name: string, status: boolean) {
 
   return { led: name, status: status ? 1 : 0 };
 }
+
+export async function batchUpdateRelays(led1: boolean, led2: boolean, led3: boolean, led4: boolean) {
+  await ensureLedStatus();
+
+  await prisma.ledStatus.update({
+    where: { id: 1 },
+    data: { led1, led2, led3, led4 },
+  });
+
+  return { led1: led1 ? 1 : 0, led2: led2 ? 1 : 0, led3: led3 ? 1 : 0, led4: led4 ? 1 : 0 };
+}

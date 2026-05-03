@@ -25,10 +25,10 @@ export default function DataPage() {
 
   function exportCSV() {
     if (!rows.length) return;
-    const headers = ['ID', 'Timestamp', 'Temp', 'Humidity', 'EC', 'pH', 'N', 'P', 'K'];
+    const headers = ['ID', 'Timestamp', 'Temp', 'Humidity', 'EC', 'pH', 'N', 'P', 'K', 'Lux', 'Voltage', 'Current', 'Power', 'NPK OK', 'BH1750 OK', 'INA219 OK'];
     const csv = [
       headers.join(','),
-      ...rows.map(r => [r.id, r.regDate, r.soilTemperature, r.soilHumidity, r.soilConductivity, r.soilPH, r.nitrogen, r.phosphorus, r.potassium].join(',')),
+      ...rows.map(r => [r.id, r.regDate, r.soilTemperature, r.soilHumidity, r.soilConductivity, r.soilPH, r.nitrogen, r.phosphorus, r.potassium, r.lux, r.voltageV, r.currentA, r.powerW, r.npkValid, r.bh1750Valid, r.ina219Valid].join(',')),
     ].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -75,6 +75,11 @@ export default function DataPage() {
                 <th>N (mg/kg)</th>
                 <th>P (mg/kg)</th>
                 <th>K (mg/kg)</th>
+                <th>Ánh sáng (Lux)</th>
+                <th>Điện áp (V)</th>
+                <th>Dòng (A)</th>
+                <th>Công suất (W)</th>
+                <th>Lỗi Cảm Biến</th>
               </tr>
             </thead>
             <tbody>
@@ -89,10 +94,20 @@ export default function DataPage() {
                   <td className={r.nitrogen < 100 ? 'anomaly' : ''}>{v(r.nitrogen, 0)}</td>
                   <td>{v(r.phosphorus, 0)}</td>
                   <td>{v(r.potassium, 0)}</td>
+                  <td>{v(r.lux, 0)}</td>
+                  <td>{v(r.voltageV, 2)}</td>
+                  <td>{v(r.currentA, 3)}</td>
+                  <td>{v(r.powerW, 2)}</td>
+                  <td style={{ fontSize: '12px' }}>
+                    {!r.npkValid && <span style={{ color: 'var(--error)', marginRight: 4 }}>NPK</span>}
+                    {!r.bh1750Valid && <span style={{ color: 'var(--error)', marginRight: 4 }}>BH1750</span>}
+                    {!r.ina219Valid && <span style={{ color: 'var(--error)' }}>INA219</span>}
+                    {(r.npkValid && r.bh1750Valid && r.ina219Valid) ? <span style={{ color: 'var(--success)' }}>OK</span> : ''}
+                  </td>
                 </tr>
               ))}
               {rows.length === 0 && (
-                <tr><td colSpan={9} style={{ textAlign: 'center', padding: 48, color: 'var(--on-surface-variant)' }}>Chưa có dữ liệu</td></tr>
+                <tr><td colSpan={16} style={{ textAlign: 'center', padding: 48, color: 'var(--on-surface-variant)' }}>Chưa có dữ liệu</td></tr>
               )}
             </tbody>
           </table>

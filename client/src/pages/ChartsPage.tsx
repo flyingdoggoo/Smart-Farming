@@ -40,6 +40,10 @@ export default function ChartsPage() {
           humidity: d.soilHumidity?.[i] ?? null,
           ec: d.soilConductivity?.[i] ?? null,
           ph: d.soilPH?.[i] ?? null,
+          lux: d.lux?.[i] ?? null,
+          voltageV: d.voltageV?.[i] ?? null,
+          currentA: d.currentA?.[i] ?? null,
+          powerW: d.powerW?.[i] ?? null,
         };
       });
 
@@ -122,6 +126,30 @@ export default function ChartsPage() {
                 <Line type="monotone" dataKey="humidity" stroke="#00affe" name="Độ ẩm (%)" strokeWidth={2} dot={false} connectNulls />
                 <Line type="monotone" dataKey="ph" stroke="#16a34a" name="pH" strokeWidth={2} dot={false} connectNulls />
                 <Line type="monotone" dataKey="ec" stroke="#f97316" name="EC" strokeWidth={2} dot={false} connectNulls />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+      {/* Energy Chart */}
+      <div className="card" style={{ marginTop: 'var(--space-md)' }}>
+        <div className="card-body">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+            <h3 className="card-title" style={{ marginBottom: 0 }}>Biến động Ánh sáng & Năng lượng</h3>
+          </div>
+          <div style={{ height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={soilData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--outline-variant)" />
+                <XAxis dataKey="time" tick={{ fontSize: 11 }} minTickGap={20} />
+                <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
+                <Tooltip contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
+                <Legend />
+                <Line yAxisId="left" type="monotone" dataKey="powerW" stroke="#ef4444" name="Công suất (W)" strokeWidth={2.1} dot={false} connectNulls />
+                <Line yAxisId="left" type="monotone" dataKey="voltageV" stroke="#f59e0b" name="Điện áp (V)" strokeWidth={2} dot={false} connectNulls />
+                <Line yAxisId="left" type="monotone" dataKey="currentA" stroke="#10b981" name="Dòng (A)" strokeWidth={2} dot={false} connectNulls />
+                <Line yAxisId="right" type="monotone" dataKey="lux" stroke="#3b82f6" name="Ánh sáng (Lux)" strokeWidth={2} dot={false} connectNulls />
               </LineChart>
             </ResponsiveContainer>
           </div>
